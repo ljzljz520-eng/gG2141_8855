@@ -16,6 +16,10 @@ func CloneRecords(records []MemberRecord) []MemberRecord {
 	return result
 }
 
+// ReplacePhone updates the phone number of a single member within a roster
+// snapshot. Only the targeted member is touched; other members of the same
+// faculty keep their own phone numbers. (Previously this spread the new phone
+// to every peer in the same faculty, corrupting unrelated records.)
 func ReplacePhone(records []MemberRecord, id string, phone string) ([]MemberRecord, bool) {
 	result := CloneRecords(records)
 	changed := false
@@ -23,12 +27,8 @@ func ReplacePhone(records []MemberRecord, id string, phone string) ([]MemberReco
 		if result[i].ID == id {
 			result[i].Phone = normalizePhone(phone)
 			result[i].Revision++
-			for j := range result {
-				if j != i && result[j].Faculty == result[i].Faculty {
-					result[j].Phone = result[i].Phone
-				}
-			}
 			changed = true
+			break
 		}
 	}
 	return result, changed
