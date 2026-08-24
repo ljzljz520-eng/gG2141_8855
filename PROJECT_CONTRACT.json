@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "metrics": {
+    "production_loc": 2305,
+    "production_files": 38,
+    "production_packages": 9,
+    "test_files": 9,
+    "production_functions": 154,
+    "decision_points": 372
+  },
+  "persistence": {
+    "module": "modernc.org/sqlite",
+    "entities": [
+      "MemberRecord",
+      "ContactPoint",
+      "ClubRole",
+      "ChangeEvent"
+    ],
+    "reopen_test": "TestPersistenceSurvivesReopen"
+  },
+  "workflows": [
+    {
+      "steps": [
+        "管理员填写姓名、学号、学院和联系方式",
+        "服务规范化手机号、邮箱、标签和联系人",
+        "服务校验学院目录和资料完整性",
+        "事务性写入成员、标签、联系人和备注"
+      ],
+      "test": "TestWorkflowEnrollment"
+    },
+    {
+      "steps": [
+        "查看员提交学院或状态筛选条件",
+        "存储层读取成员及关联标签联系人",
+        "服务按标签或关键词缩小结果",
+        "界面输出排序后的成员档案摘要"
+      ],
+      "test": "TestWorkflowSearch"
+    },
+    {
+      "steps": [
+        "管理员提交目标成员和变更原因",
+        "策略校验角色、学院和原因",
+        "服务生成字段变更事件并保存新资料",
+        "管理员查看同学院成员和变更历史"
+      ],
+      "test": "TestWorkflowPhoneChange"
+    },
+    {
+      "steps": [
+        "打开嵌入式数据库并初始化表结构",
+        "写入成员档案和变更事件",
+        "关闭数据库句柄",
+        "重新打开并读取原有资料"
+      ],
+      "test": "TestPersistenceSurvivesReopen"
+    }
+  ]
+}
